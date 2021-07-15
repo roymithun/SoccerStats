@@ -61,9 +61,9 @@ class SoccerMatchServiceTest {
 
         mockWebServer.enqueue(response)
         runBlocking(coroutineTestRule.testDispatcher) {
-            val articleListResponse: Response<List<Match>> = soccerMatchService.fetchMatchListA()
-            assertThat(articleListResponse.isSuccessful).isTrue()
-            assertThat(articleListResponse.body()?.first()?.teamA).isEqualTo("FC Barcelona")
+            val matchListResponse: Response<List<Match>> = soccerMatchService.fetchMatchListA()
+            assertThat(matchListResponse.isSuccessful).isTrue()
+            assertThat(matchListResponse.body()?.first()?.teamA).isEqualTo("FC Barcelona")
         }
     }
 }
