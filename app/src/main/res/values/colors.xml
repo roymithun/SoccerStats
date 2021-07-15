@@ -8,4 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="off_white">#C8F1F1F1</color>
+    <color name="network_error">#D32F2F</color>
+    <color name="network_connected">#43A047</color>
 </resources>

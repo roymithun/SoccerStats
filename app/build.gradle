@@ -74,7 +74,8 @@ dependencies {
 
     // Image processing
     implementation "io.coil-kt:coil:$version_coil"
-    implementation "com.google.android.material:material:1.4.0"
+
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$version_swiperefresh_layout"
 
     // Local Unit Tests
     testImplementation "junit:junit:$version_junit"

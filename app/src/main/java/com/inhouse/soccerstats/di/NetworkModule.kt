@@ -1,5 +1,7 @@
 package com.inhouse.soccerstats.di
 
+import android.content.Context
+import android.net.ConnectivityManager
 import com.inhouse.soccerstats.data.remote.api.SoccerMatchService
 import com.inhouse.soccerstats.utils.BASE_URL
 import com.squareup.moshi.Moshi
@@ -7,6 +9,7 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -15,6 +18,11 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+    @Singleton
+    @Provides
+    fun connectivityManager(@ApplicationContext context: Context): ConnectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
     @Singleton
     @Provides
     fun moshi(): Moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
