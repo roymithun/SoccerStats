@@ -1,34 +1,29 @@
 package com.inhouse.soccerstats.model
 
-import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.inhouse.soccerstats.model.Match.Companion.TABLE_NAME
 import com.inhouse.soccerstats.utils.dateOnlyFormat
 import com.inhouse.soccerstats.utils.longDateFormat
 import com.inhouse.soccerstats.utils.timeOnlyFormat
-import com.squareup.moshi.Json
-import kotlinx.parcelize.IgnoredOnParcel
-import kotlinx.parcelize.Parcelize
 import java.util.*
 
-@Parcelize
+@Entity(tableName = TABLE_NAME)
 data class Match(
-    @Json(name = "Team_A") val teamA: String,
-    @Json(name = "Team_B") val teamB: String,
-    @Json(name = "Score") val score: String,
-    @Json(name = "link_A") val linkA: String,
-    @Json(name = "link_B") val linkB: String,
-    @Json(name = "Date") val date: String
-) : Parcelable {
-    @IgnoredOnParcel
-    private val matchDateTime: Date
-        get() = longDateFormat().parse(date) ?: Date()
-
-    val matchDate: String
-        get() = dateOnlyFormat().format(matchDateTime)
-
-    val matchTime: String
-        get() = timeOnlyFormat().format(matchDateTime)
-    @IgnoredOnParcel
-    val scoreSplit = score.split("-")
-    val scoreA = scoreSplit.first()
-    val scoreB = scoreSplit.last()
+    @PrimaryKey val id: Int,
+    val teamA: String,
+    val teamB: String,
+    val score: String,
+    val linkA: String,
+    val linkB: String,
+    val date: String
+) {
+    companion object {
+        const val TABLE_NAME = "matches"
+    }
 }
+
+fun Match.matchDateTime(): Date = longDateFormat().parse(date) ?: Date()
+fun Match.matchDate(): String = dateOnlyFormat().format(matchDateTime())
+fun Match.matchTime(): String = timeOnlyFormat().format(matchDateTime())
+fun Match.scoreSplit(): Pair<String, String> = score.split("-").let { Pair(it.first(), it.last()) }

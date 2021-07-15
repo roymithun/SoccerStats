@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.inhouse.soccerstats.databinding.MatchSummaryItemBinding
 import com.inhouse.soccerstats.model.Match
+import com.inhouse.soccerstats.model.matchDate
+import com.inhouse.soccerstats.model.matchTime
+import com.inhouse.soccerstats.model.scoreSplit
 import com.inhouse.soccerstats.utils.getInitials
 
 class MatchAdapter : ListAdapter<Match, MatchAdapter.MatchViewHolder>(MatchItemDiffCallback()) {
@@ -36,11 +39,11 @@ class MatchAdapter : ListAdapter<Match, MatchAdapter.MatchViewHolder>(MatchItemD
             binding.tvTeamAName.text = getInitials(match.teamA)
             binding.tvTeamBName.text = getInitials(match.teamB)
 
-            binding.tvMatchDate.text = match.matchDate
-            binding.tvMatchTime.text = match.matchTime
+            binding.tvMatchDate.text = match.matchDate()
+            binding.tvMatchTime.text = match.matchTime()
 
-            binding.scoreCardA.tvScore.text = match.scoreA
-            binding.scoreCardB.tvScore.text = match.scoreB
+            binding.scoreCardA.tvScore.text = match.scoreSplit().first
+            binding.scoreCardB.tvScore.text = match.scoreSplit().second
         }
     }
 

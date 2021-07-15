@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -49,22 +50,26 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             mainViewModel.getAllMatches()
         }
         observeNetworkConnectivityEvents()
+        // If current State isn't `Success` then query for all matches again
+        mainViewModel.matchesFlow.value.let { currentState ->
+            if (!currentState.isSuccessful()) {
+                mainViewModel.getAllMatches()
+            }
+        }
         viewLifecycleOwner.lifecycleScope.launch {
             mainViewModel.matchesFlow.collect { state ->
                 when (state) {
                     is State.Loading -> {
-                        println("loading state")
                         showLoading(true)
                     }
                     is State.Success -> {
                         if (state.data.isNotEmpty()) {
-                            println("success response ${state.data.toList()}")
                             adapter.submitList(state.data.toMutableList())
                             showLoading(false)
                         }
                     }
                     is State.Error -> {
-                        println("error response ${state.message}")
+                        Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
                         showLoading(true)
                     }
                 }
@@ -79,7 +84,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private fun observeNetworkConnectivityEvents() {
         networkConnectionUtils.getNetworkLiveData().observe(viewLifecycleOwner) { isConnected ->
             if (!isConnected) {
-                showLoading(false)
                 binding.tvNetworkStatus.text = getString(R.string.text_no_connectivity)
                 binding.llNetworkStatus.apply {
                     visibility = View.VISIBLE

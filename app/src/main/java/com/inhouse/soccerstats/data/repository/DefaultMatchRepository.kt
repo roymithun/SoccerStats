@@ -1,29 +1,47 @@
 package com.inhouse.soccerstats.data.repository
 
+import com.inhouse.soccerstats.data.local.SoccerMatchDao
 import com.inhouse.soccerstats.data.remote.api.SoccerMatchService
-import com.inhouse.soccerstats.model.Match
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
+import com.inhouse.soccerstats.model.NetworkMatch
+import com.inhouse.soccerstats.utils.networkModelToDatabaseModelList
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class DefaultMatchRepository @Inject constructor(
-    private val matchService: SoccerMatchService
+    private val soccerMatchDao: SoccerMatchDao,
+    private val soccerMatchService: SoccerMatchService
 ) :
     MatchRepository {
-    override fun getAllMatches() = flow<Resource<List<Match>>> {
+    override fun getAllMatches() = flow {
         // Emit Database content first
-        emit(Resource.Success(emptyList()))
-        val matchesA = matchService.fetchMatchListA()
-        val matchesB = matchService.fetchMatchListB()
-        val resultA: List<Match> =
-            if (matchesA.isSuccessful) matchesA.body() ?: emptyList() else emptyList()
-        val resultB = if (matchesB.isSuccessful) matchesB.body() ?: emptyList() else emptyList()
+        emit(Resource.Success(soccerMatchDao.getAllMatches().first()))
+
+        // Remote Datasource handling
+        val responseMatchesA = soccerMatchService.fetchMatchListA()
+        val matchesA = responseMatchesA.body()
+        if (!responseMatchesA.isSuccessful or (matchesA == null)) {
+            emit(Resource.Failed(responseMatchesA.message()))
+        }
+        val responseMatchesB = soccerMatchService.fetchMatchListB()
+        val matchesB = responseMatchesB.body()
+        if (!responseMatchesB.isSuccessful or (matchesB == null)) {
+            emit(Resource.Failed(responseMatchesB.message()))
+        }
+
+        val resultA: List<NetworkMatch> = matchesA ?: emptyList()
+        val resultB: List<NetworkMatch> = matchesB ?: emptyList()
 
         val result = resultA + resultB
+        soccerMatchDao.insertAllMatches(networkModelToDatabaseModelList(result))
 
-        emit(Resource.Success(result))
+        // fetch all matches from room persistence storage and emit
+        emitAll(
+            soccerMatchDao.getAllMatches().map {
+                Resource.Success(it)
+            }
+        )
     }.catch { e ->
         e.printStackTrace()
         emit(Resource.Failed("Network error! Try again later"))

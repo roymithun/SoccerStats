@@ -17,10 +17,6 @@ class MainViewModel @Inject constructor(private val matchRepository: MatchReposi
     private val _matchesFlow = MutableStateFlow<State<List<Match>>>(State.loading())
     val matchesFlow: StateFlow<State<List<Match>>> = _matchesFlow
 
-    init {
-        getAllMatches()
-    }
-
     fun getAllMatches() {
         viewModelScope.launch {
             matchRepository.getAllMatches()
