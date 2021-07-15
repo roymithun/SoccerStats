@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="10dp"
@@ -23,7 +25,7 @@
             android:id="@+id/cl_image_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toStartOf="@+id/score_card_b"
             app:layout_constraintStart_toEndOf="@+id/score_card_a"
             app:layout_constraintTop_toTopOf="parent">
@@ -82,7 +84,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="NCU"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/tv_team_b_name"
@@ -106,20 +107,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Sat 30 Nov"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/score_card_b"
             app:layout_constraintStart_toEndOf="@+id/score_card_a"
-            app:layout_constraintTop_toBottomOf="@+id/tv_team_a_name" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_team_a_name"
+            tools:text="Sat 30 Nov" />
 
         <TextView
             android:id="@+id/tv_match_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="04:30 PM"
             app:layout_constraintEnd_toStartOf="@+id/score_card_b"
             app:layout_constraintStart_toEndOf="@+id/score_card_a"
-            app:layout_constraintTop_toBottomOf="@+id/tv_match_date" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_match_date"
+            tools:text="04:30 pm" />
 
         <include
             android:id="@+id/score_card_b"

@@ -27,4 +27,8 @@ data class Match(
 
     val matchTime: String
         get() = timeOnlyFormat().format(matchDateTime)
+    @IgnoredOnParcel
+    val scoreSplit = score.split("-")
+    val scoreA = scoreSplit.first()
+    val scoreB = scoreSplit.last()
 }
