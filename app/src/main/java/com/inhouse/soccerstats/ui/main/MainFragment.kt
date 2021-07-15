@@ -12,11 +12,13 @@ import androidx.annotation.ColorRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.inhouse.soccerstats.R
 import com.inhouse.soccerstats.databinding.FragmentMainBinding
+import com.inhouse.soccerstats.model.Match
 import com.inhouse.soccerstats.model.State
 import com.inhouse.soccerstats.ui.main.adapter.MatchAdapter
-import com.inhouse.soccerstats.ui.main.viewholder.MainViewModel
+import com.inhouse.soccerstats.ui.main.viewmodel.MainViewModel
 import com.inhouse.soccerstats.utils.ANIMATION_DURATION
 import com.inhouse.soccerstats.utils.NetworkConnectionUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,7 +46,17 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = MatchAdapter()
+        adapter = MatchAdapter(object : MatchAdapter.OnClickListener {
+            override fun onClick(match: Match) {
+                val id = match.id
+                println("gibow id = $id")
+                findNavController().navigate(
+                    MainFragmentDirections.actionMainFragmentToDetailFragment(
+                        id
+                    )
+                )
+            }
+        })
         binding.rvMatchList.adapter = adapter
         binding.swipeRefreshLayout.setOnRefreshListener {
             mainViewModel.getAllMatches()

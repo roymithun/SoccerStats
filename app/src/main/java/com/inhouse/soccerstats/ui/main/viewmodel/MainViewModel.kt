@@ -1,4 +1,4 @@
-package com.inhouse.soccerstats.ui.main.viewholder
+package com.inhouse.soccerstats.ui.main.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +11,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val matchRepository: MatchRepository) :
+class MainViewModel @Inject constructor(
+    private val matchRepository: MatchRepository
+) :
     ViewModel() {
 
     private val _matchesFlow = MutableStateFlow<State<List<Match>>>(State.loading())

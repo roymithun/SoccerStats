@@ -18,5 +18,9 @@
         android:id="@+id/detailFragment"
         android:name="com.inhouse.soccerstats.ui.detail.DetailFragment"
         android:label="DetailFragment"
-        tools:layout="@layout/fragment_detail" />
+        tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="matchId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

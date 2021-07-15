@@ -22,4 +22,7 @@ interface SoccerMatchDao {
      */
     @Query("SELECT * FROM ${Match.TABLE_NAME}")
     fun getAllMatches(): Flow<List<Match>>
+
+    @Query("SELECT * FROM ${Match.TABLE_NAME} WHERE ID = :matchId")
+    fun getMatchById(matchId: Int): Flow<Match>
 }

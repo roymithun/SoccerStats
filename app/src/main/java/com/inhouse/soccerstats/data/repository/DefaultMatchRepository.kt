@@ -2,6 +2,7 @@ package com.inhouse.soccerstats.data.repository
 
 import com.inhouse.soccerstats.data.local.SoccerMatchDao
 import com.inhouse.soccerstats.data.remote.api.SoccerMatchService
+import com.inhouse.soccerstats.model.Match
 import com.inhouse.soccerstats.model.NetworkMatch
 import com.inhouse.soccerstats.utils.networkModelToDatabaseModelList
 import kotlinx.coroutines.flow.*
@@ -46,4 +47,6 @@ class DefaultMatchRepository @Inject constructor(
         e.printStackTrace()
         emit(Resource.Failed("Network error! Try again later"))
     }
+
+    override fun getMatchById(matchId: Int): Flow<Match> = soccerMatchDao.getMatchById(matchId)
 }
