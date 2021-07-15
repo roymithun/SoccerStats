@@ -23,9 +23,33 @@ android {
     }
 
     buildTypes {
+        debug {
+            versionNameSuffix ".dev"
+            debuggable true
+        }
         release {
+            debuggable false
             minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        minifiedDebug {
+            versionNameSuffix ".dev"
+            debuggable true
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    flavorDimensions "version"
+    productFlavors {
+        development {
+            dimension "version"
+            versionNameSuffix ".dev"
+        }
+        production {
+            dimension "version"
+            versionNameSuffix ".prod"
         }
     }
     compileOptions {
