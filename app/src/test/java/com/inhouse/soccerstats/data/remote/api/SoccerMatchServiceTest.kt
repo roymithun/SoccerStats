@@ -3,6 +3,7 @@ package com.inhouse.soccerstats.data.remote.api
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
 import com.inhouse.soccerstats.model.Match
+import com.inhouse.soccerstats.model.NetworkMatch
 import com.inhouse.soccerstats.utils.CoroutineTestRule
 import com.inhouse.soccerstats.utils.MockResponseFileReader
 import com.inhouse.soccerstats.utils.SUCCESS_RESPONSE_FILENAME
@@ -61,7 +62,7 @@ class SoccerMatchServiceTest {
 
         mockWebServer.enqueue(response)
         runBlocking(coroutineTestRule.testDispatcher) {
-            val matchListResponse: Response<List<Match>> = soccerMatchService.fetchMatchListA()
+            val matchListResponse: Response<List<NetworkMatch>> = soccerMatchService.fetchMatchListA()
             assertThat(matchListResponse.isSuccessful).isTrue()
             assertThat(matchListResponse.body()?.first()?.teamA).isEqualTo("FC Barcelona")
         }
