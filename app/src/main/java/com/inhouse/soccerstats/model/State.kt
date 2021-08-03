@@ -3,12 +3,16 @@ package com.inhouse.soccerstats.model
 import com.inhouse.soccerstats.data.repository.Resource
 
 sealed class State<T> {
+    class Empty<T> : State<T>()
+
     class Loading<T> : State<T>()
 
     data class Success<T>(val data: T) : State<T>()
 
     data class Error<T>(val message: String) : State<T>()
 
+    fun isEmpty(): Boolean = this is Empty
+    
     fun isLoading(): Boolean = this is Loading
 
     fun isSuccessful(): Boolean = this is Success
@@ -16,6 +20,10 @@ sealed class State<T> {
     fun isFailed(): Boolean = this is Error
 
     companion object {
+        /**
+         * Returns [State.Loading] instance.
+         */
+        fun <T> empty() = Empty<T>()
 
         /**
          * Returns [State.Loading] instance.

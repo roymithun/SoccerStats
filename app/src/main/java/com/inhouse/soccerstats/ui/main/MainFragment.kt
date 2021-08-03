@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,7 +50,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         adapter = MatchAdapter(object : MatchAdapter.OnClickListener {
             override fun onClick(match: Match) {
                 val id = match.id
-                println("gibow id = $id")
                 findNavController().navigate(
                     MainFragmentDirections.actionMainFragmentToDetailFragment(
                         id
@@ -64,7 +64,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         observeNetworkConnectivityEvents()
         // If current State isn't `Success` then query for all matches again
         mainViewModel.matchesFlow.value.let { currentState ->
-            if (!currentState.isSuccessful()) {
+            if (currentState.isEmpty() || currentState.isFailed()) {
                 mainViewModel.getAllMatches()
             }
         }
@@ -82,8 +82,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                     }
                     is State.Error -> {
                         Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
-                        showLoading(true)
+                        showLoading(false)
                     }
+                    else -> Log.d("MainFragment", "Empty state do nothing!")
                 }
             }
         }
@@ -102,7 +103,10 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                     setBackgroundColor(getColorRes(R.color.network_error))
                 }
             } else {
-                if (mainViewModel.matchesFlow.value is State.Error || adapter.itemCount == 0) {
+                val currentState = mainViewModel.matchesFlow.value
+                if (currentState is State.Error ||
+                    (adapter.itemCount == 0 && currentState !is State.Loading)
+                ) {
                     mainViewModel.getAllMatches()
                 }
                 binding.tvNetworkStatus.text = getString(R.string.text_connectivity)

@@ -6,6 +6,7 @@ import com.inhouse.soccerstats.data.repository.MatchRepository
 import com.inhouse.soccerstats.model.Match
 import com.inhouse.soccerstats.model.State
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,7 +17,7 @@ class MainViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    private val _matchesFlow = MutableStateFlow<State<List<Match>>>(State.loading())
+    private val _matchesFlow = MutableStateFlow<State<List<Match>>>(State.empty())
     val matchesFlow: StateFlow<State<List<Match>>> = _matchesFlow
 
     fun getAllMatches() {
@@ -24,6 +25,7 @@ class MainViewModel @Inject constructor(
             matchRepository.getAllMatches()
                 .onStart { _matchesFlow.value = State.loading() }
                 .map { resource -> State.fromResource(resource) }
+                .flowOn(Dispatchers.IO)
                 .collect { _matchesFlow.value = it }
         }
     }
