@@ -6,9 +6,9 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 interface SoccerMatchService {
-    @GET(value = "23745f3a-5eaa-43cf-ab46-737eb273596b")
+    @GET(value = "9febbce8-92bb-4f01-85e3-c85c453b4924")
     suspend fun fetchMatchListA(): Response<List<NetworkMatch>>
 
-    @GET(value = "bc1ce3b7-6ad2-4fef-af6c-08f8865b210e")
+    @GET(value = "2b0e7230-a048-4129-b08e-350b7a50fa83")
     suspend fun fetchMatchListB(): Response<List<NetworkMatch>>
 }
